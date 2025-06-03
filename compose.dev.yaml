@@ -1,0 +1,79 @@
+services:
+  media:
+    build:
+      context: .
+      target: development
+    command: ["go", "run", "./cmd/ember-backend-media/main.go"]
+    ports:
+      - "50052:50051"
+    networks:
+      - ember
+    volumes:
+      - .:/app
+      - ./tmp:/app/tmp
+    environment:
+      APP_HOST: media
+      APP_PORT: 50051
+      APP_LOG_LEVEL: debug
+
+      POSTGRES_HOST: postgres-media
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: media
+      POSTGRES_PASS: media
+      POSTGRES_NAME: media
+
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+      MINIO_ENDPOINT: minio-media:9000
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+      MINIO_BUCKET: media
+      MINIO_USE_SSL: false
+
+  postgres-media:
+    image: postgres:14-alpine
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_USER: media
+      POSTGRES_PASSWORD: media
+      POSTGRES_DB: media
+    networks:
+      - ember
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U media" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+
+  minio-media:
+    image: minio/minio
+    command: server /data
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    networks:
+      - ember
+    volumes:
+      - minio-data:/data
+
+  redis-media:
+    image: redis:latest
+    ports:
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - ember
+
+volumes:
+  pg-data:
+  redis-data:
+  minio-data:
+
+networks:
+  ember:
+    external: true
