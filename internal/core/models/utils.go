@@ -10,6 +10,8 @@ type Options struct {
 	Config *config.Config
 }
 
+const MaxFileSize = 100 << 20
+
 const (
 	MediaTable = "media"
 )

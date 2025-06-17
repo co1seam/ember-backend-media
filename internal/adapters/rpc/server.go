@@ -31,11 +31,13 @@ type Server struct {
 }
 
 func NewServer() *Server {
-	return &Server{grpc: grpc.NewServer()}
+	return &Server{grpc: grpc.NewServer(
+		grpc.MaxRecvMsgSize(100*1024*1024),
+		grpc.MaxSendMsgSize(100*1024*1024))}
 }
 
 func (s *Server) Run(handler *Handler) error {
-	conn, err := net.Listen("tcp", ":50051")
+	conn, err := net.Listen("tcp", ":50052")
 	if err != nil {
 		return err
 	}

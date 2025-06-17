@@ -67,7 +67,7 @@ func (m *Media) GetByID(ctx context.Context, id string) (*models.Media, error) {
 
 func (m *Media) Update(ctx context.Context, media *models.Media) error {
 	query := fmt.Sprintf(
-		"UPDATE %s SET title = $1, description = $2 WHERE id = $3",
+		"UPDATE %s SET title = $1, description = $2, content_type = $3, storage_path = $4, owner_id = $5, created_at = $6 WHERE id = $7",
 		models.MediaTable,
 	)
 
@@ -76,6 +76,10 @@ func (m *Media) Update(ctx context.Context, media *models.Media) error {
 		query,
 		media.Title,
 		media.Description,
+		media.ContentType,
+		media.StoragePath,
+		media.OwnerID,
+		media.CreatedAt,
 		media.ID,
 	)
 	return err

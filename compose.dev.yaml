@@ -5,7 +5,7 @@ services:
       target: development
     command: ["go", "run", "./cmd/ember-backend-media/main.go"]
     ports:
-      - "50052:50051"
+      - "50052:50052"
     networks:
       - ember
     volumes:
@@ -13,7 +13,7 @@ services:
       - ./tmp:/app/tmp
     environment:
       APP_HOST: media
-      APP_PORT: 50051
+      APP_PORT: 50052
       APP_LOG_LEVEL: debug
 
       POSTGRES_HOST: postgres-media
@@ -63,7 +63,7 @@ services:
   redis-media:
     image: redis:latest
     ports:
-      - "6380:6379"
+      - "6380:6380"
     volumes:
       - redis-data:/data
     networks:

@@ -3,6 +3,8 @@ package ports
 import (
 	"context"
 	"github.com/co1seam/ember-backend-media/internal/core/models"
+	"github.com/minio/minio-go/v7"
+	"io"
 	"time"
 )
 
@@ -22,5 +24,17 @@ type (
 		DeleteMedia(ctx context.Context, id string) error
 		ListMedia(ctx context.Context, ownerID string, limit int) ([]*models.Media, error)
 		GetFileURL(ctx context.Context, objectName string, expiry time.Duration) (string, error)
+		UploadFile(ctx context.Context, fileID string, fileName string, size int64, stream io.Reader) (string, error)
+		DownloadFile(ctx context.Context, fileID string) (*minio.Object, error)
+		GetStatFile(ctx context.Context, objectName string) (*minio.ObjectInfo, error)
+		DownloadFileRange(ctx context.Context, objectName string, start, end int64) (io.ReadCloser, error)
+	}
+
+	FileUploadStream interface {
+		Recv() ([]byte, error)
+	}
+
+	FileDownloadStream interface {
+		Send([]byte) error
 	}
 )

@@ -1,8 +1,8 @@
 GRPC grpc://localhost:50052/media.MediaService/CreateMedia
 
 {
-  "title": "media",
-  "description": "media desc",
+  "title": "media1",
+  "description": "media desc1",
   "content_type": "mp4",
-  "owner_id": "1"
+  "owner_id": "2"
 }
